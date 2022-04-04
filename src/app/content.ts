@@ -15,6 +15,7 @@ function updateUI() {
   pressContinueInChrome();
   pressCloseOnOpenAppPopup();
   moveNavTop();
+  hidePostTopAd();
 }
 
 function makeStyleClasses() {
@@ -129,19 +130,34 @@ function detectScrollAndRemoveFillers() {
       const parentEl = findParent(promo, ".post-cell");
       if (parentEl && parentEl.style.display !== "none") {
         parentEl.style.display = "none";
-        console.log("removed promotion");
       }
     }
 
     const signUpListBanner = document.querySelectorAll(
-      "#stream-2 > div.post-signup-list-banner"
+      "div > div.post-signup-list-banner"
     );
     for (const banner of signUpListBanner) {
       if ((banner as HTMLDivElement).style.display === "none") return;
       (banner as HTMLDivElement).style.display = "none";
-      console.log("removed sign up list banner");
+    }
+
+    const ads = document.querySelectorAll('div > section.salt-container')
+    for (const ad of ads) {
+      if ((ad as HTMLDivElement).style.display === "none") return;
+      (ad as HTMLDivElement).style.display = "none";
     }
   };
+}
+
+function hidePostTopAd() {
+  const isPost = location.pathname.startsWith("/gag/");
+  if (!isPost) return;
+  const el = document.querySelector(
+    "#jsid-app > div > div > div.content-wrap > div:nth-child(2) > div > section.salt-container.above-comment"
+  );
+  if (el) {
+    (el as HTMLDivElement).style.display = "none";
+  }
 }
 
 function findParent(el: Element, selector: string) {
